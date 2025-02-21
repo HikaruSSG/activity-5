@@ -33,7 +33,8 @@ public class BankingSystem {
             System.out.println("3. Deposit Money");
             System.out.println("4. Withdraw Money");
             System.out.println("5. Check Balance");
-            System.out.println("6. Exit");
+            System.out.println("6. Delete Account");
+            System.out.println("7. Exit");
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
@@ -55,12 +56,15 @@ public class BankingSystem {
                     checkBalance();
                     break;
                 case 6:
+                    deleteAccount();
+                    break;
+                case 7:
                     System.out.println("Exiting Banking System. Thank you!");
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != 6);
+        } while (choice != 7);
     }
 
     public static void createAccount() {
@@ -136,6 +140,35 @@ public class BankingSystem {
         }
         System.out.println("Account Name: " + accountNames.get(currentAccountIndex));
         System.out.println("Current Balance: " + balances.get(currentAccountIndex));
+    }
+
+    public static void deleteAccount() {
+        if (accountNames.isEmpty()) {
+            System.out.println("No accounts exist. Please create an account first.");
+            return;
+        }
+        System.out.println("Available accounts:");
+        for (int i = 0; i < accountNames.size(); i++) {
+            System.out.println((i + 1) + ". " + accountNames.get(i));
+        }
+        System.out.print("Enter the number of the account to delete: ");
+        int accountIndex = scanner.nextInt() - 1;
+        scanner.nextLine(); // Consume newline
+
+        if (accountIndex < 0 || accountIndex >= accountNames.size()) {
+            System.out.println("Invalid account number.");
+            return;
+        }
+
+        String deletedAccountName = accountNames.remove(accountIndex);
+        balances.remove(accountIndex);
+        System.out.println("Account deleted: " + deletedAccountName);
+
+        if (currentAccountIndex == accountIndex) {
+            currentAccountIndex = -1;
+        } else if (currentAccountIndex > accountIndex) {
+            currentAccountIndex--;
+        }
     }
 
     public static void loadData() {
